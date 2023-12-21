@@ -1,5 +1,8 @@
-val zioVersion: String = "2.0.20"
 val scala3Version: String = "3.3.1"
+val zioVersion: String = "2.0.20"
+val zioHttpVersion: String = "3.0.0-RC3"
+val zioJsonVersion: String = "0.5.0"
+
 lazy val root = project
   .in(file("."))
   .settings(
@@ -9,6 +12,8 @@ lazy val root = project
     libraryDependencies ++= Seq(
       "org.scalameta" %% "munit" % "0.7.29" % Test,
       "dev.zio" %% "zio" % zioVersion,
-      "dev.zio" %% "zio-streams" % zioVersion
+      "dev.zio" %% "zio-streams" % zioVersion,
+      "dev.zio" %% "zio-http" % zioVHttpersion,
+      "dev.zio" %% "zio-json" % zioJsonVersion
     )
   )
