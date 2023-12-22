@@ -2,6 +2,7 @@ val scala3Version: String = "3.3.1"
 val zioVersion: String = "2.0.20"
 val zioHttpVersion: String = "3.0.0-RC3"
 val zioJsonVersion: String = "0.5.0"
+val zioSqlVersion: String = "0.1.2"
 
 lazy val root = project
   .in(file("."))
@@ -14,6 +15,7 @@ lazy val root = project
       "dev.zio" %% "zio" % zioVersion,
       "dev.zio" %% "zio-streams" % zioVersion,
       "dev.zio" %% "zio-http" % zioHttpVersion,
-      "dev.zio" %% "zio-json" % zioJsonVersion
+      "dev.zio" %% "zio-json" % zioJsonVersion,
+      "dev.zio" %% "zio-sql-mysql" % zioSqlVersion
     )
   )

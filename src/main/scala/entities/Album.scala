@@ -1,4 +1,4 @@
-// Classe qui représete un album
+// Classe qui représente un album
 
 case class Album(
     albumId: String,
