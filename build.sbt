@@ -24,7 +24,9 @@ lazy val root = project
       "com.softwaremill.sttp.client3" %% "core" % "3.8.13",
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-future" % "3.8.13",
       "io.d11" %% "zhttp" % "2.0.0-RC10",
-      "io.circe" %% "circe-generic" % "0.14.5", // Use the appropriate version
-      "io.circe" %% "circe-parser" % "0.14.5"
+      "io.circe" %% "circe-generic" % "0.14.5",
+      "io.circe" %% "circe-parser" % "0.14.5",
+      "com.opencsv" % "opencsv" % "5.7.1",
+      "au.com.bytecode" % "opencsv" % "2.4"
     )
   )
