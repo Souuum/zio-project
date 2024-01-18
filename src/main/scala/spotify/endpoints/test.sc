@@ -112,7 +112,7 @@ object TracksRepository extends IBaseRepository[Track]{
   override def getAllAveragePopularityByGenre(): ListBuffer[Track] = ???
 }
 
-object ArtistsRepository extends IBaseRepository[Artist]{
+object ArtistRepository extends IBaseRepository[Artist]{
   val artists = CsvReaderExample.main("artists.csv")
   val artistsMutableList: ListBuffer[Artist] = ListBuffer()
   for (artist <- artists) {

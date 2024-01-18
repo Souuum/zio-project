@@ -1,12 +1,13 @@
 // Classe qui représente un album
 
 case class Album(
-    albumId: String,
-    name: String,
-    externalUrls: String,
-    releaseDate: java.time.LocalDate,
-    genres: List[Genre],
-    artists: List[Artist],
-    tracks: List[Track],
-    popularity: List[Popularity]
-)
+                  id : String,
+                  name: String,
+                  album_type: String,
+                  total_tracks: String,
+                  release_date: String,
+                  popularity: String,
+                  external_urls : String,
+                  id_artists: List[String],
+                  id_tracks: List[String]
+                )
