@@ -159,7 +159,7 @@ class APICalls {
     val AlbumsCSV = new WriterCSV()
     AlbumsCSV.open("Albums.csv")
 
-    var entries = Array("id", "name", "album_type", "total_tracks", "release_date", "popularity", "external_urls", "id_artists")
+    var entries = Array("id", "name", "album_type", "total_tracks", "release_date", "popularity", "external_urls", "id_artists", "id_tracks")
     AlbumsCSV.writeInCSV(entries)
 
 
@@ -177,9 +177,11 @@ class APICalls {
       //id_artists
       val artistsArray: Vector[Json] = trackJson.hcursor.downField("tracks").downField("items").as[Vector[Json]].getOrElse(Vector.empty)
       val id_artists: String = artistsArray.flatMap(_.hcursor.downField("artists").downArray.downField("id").as[String].toOption).mkString(" ")
+      //id_tracks
+      val tracksArray: Vector[Json] = trackJson.hcursor.downField("tracks").downField("items").as[Vector[Json]].getOrElse(Vector.empty)
+      val id_tracks: String = tracksArray.flatMap(_.hcursor.downField("id").as[String].toOption).mkString(" ")
 
-
-      val entries: Array[String] = Array(id.getOrElse(""), name.getOrElse(""), album_type.getOrElse(""), total_tracks.map(_.toString).getOrElse(""), release_date.getOrElse(""), popularity.map(_.toString).getOrElse(""), external_urls.getOrElse(""), id_artists)
+      val entries: Array[String] = Array(id.getOrElse(""), name.getOrElse(""), album_type.getOrElse(""), total_tracks.map(_.toString).getOrElse(""), release_date.getOrElse(""), popularity.map(_.toString).getOrElse(""), external_urls.getOrElse(""), id_artists, id_tracks)
 
       AlbumsCSV.writeInCSV(entries);
     }
