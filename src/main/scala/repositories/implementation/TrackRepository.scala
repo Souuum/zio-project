@@ -5,15 +5,18 @@ import entities.Track
 import scala.collection.mutable.ListBuffer
 
 object TrackRepository extends IBaseRepository[Track]{
-  val tracks = CsvReaderBatch.beginRead("tracks.csv")
+  val tracks = CsvReaderBatch.beginRead("Tracks.csv")
   val tracksMutableList: ListBuffer[Track] = ListBuffer()
   for (track <- tracks) {
-    for (index <- track) {
-      val parts: List[String] = index.split(";").toList
-
-      val track = Track(parts(0), parts(1), parts(2), parts(3), parts(4), parts(5).split(" ").toList, parts(6).split(" ").toList)
-      tracksMutableList += track
+    val trackToAdd = track match {
+      case List(id, name, popularity, explicit, url, id_album, id_artistsList) =>
+        val id_artists = id_artistsList.split(" ").map(_.trim).toList
+        Track(id, name, popularity, explicit, url, id_album, id_artists)
+      case _ =>
+        throw new IllegalArgumentException("Invalid list format")
     }
+    tracksMutableList += trackToAdd
+
   }
 
   override def getAll(): ListBuffer[Track] = tracksMutableList

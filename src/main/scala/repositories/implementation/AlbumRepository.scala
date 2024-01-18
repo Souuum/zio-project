@@ -5,15 +5,19 @@ import scala.collection.mutable.ListBuffer
 import repositories.interface.IBaseRepository
 import entities.Album
 object AlbumRepository extends IBaseRepository[Album] {
-  val albums = CsvReaderBatch.beginRead("albums.csv")
+  val albums = CsvReaderBatch.beginRead("Albums.csv")
   val albumsMutableList: ListBuffer[Album] = ListBuffer()
   for (album <- albums) {
-    for (index <- album) {
-      val parts: List[String] = index.split(";").toList
+    println(album)
+    val albumToAdd = album match {
+      case List(id, name, album_type, total_tracks, release_date, popularity, external_urls, id_artistsList, id_tracksList) =>
+        val id_artists = id_artistsList.split(" ").map(_.trim).toList
+        val id_tracks = id_tracksList.split(" ").map(_.trim).toList
+        Album(id, name, album_type, total_tracks, release_date, popularity, external_urls, id_artists, id_tracks)
 
-      val album = Album(parts(0), parts(1), parts(2), parts(3), parts(4), parts(5), parts(6), parts(7).split(" ").toList, parts(8).split(" ").toList)
-      albumsMutableList += album
+
     }
+    albumsMutableList += albumToAdd
   }
 
   override def getAll(): ListBuffer[Album] = albumsMutableList

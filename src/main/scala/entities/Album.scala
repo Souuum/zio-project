@@ -1,5 +1,6 @@
 // Classe qui représente un album
 package entities
+
 case class Album(
                   id : String,
                   name: String,

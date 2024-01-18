@@ -1,6 +1,6 @@
 val scala3Version: String = "3.3.1"
 val zioVersion: String = "2.0.20"
-val zioHttpVersion: String = "3.0.0-RC3"
+val zioHttpVersion: String = "3.0.0-RC2"
 val zioJsonVersion: String = "0.5.0"
 val zioJdbcVersion: String = "0.1.1"
 val zioSchemaVersion = "0.4.11"
@@ -26,7 +26,6 @@ lazy val root = project
       "io.circe" %% "circe-generic" % "0.14.5",
       "io.circe" %% "circe-parser" % "0.14.5",
       "com.opencsv" % "opencsv" % "5.7.1",
-      "au.com.bytecode" % "opencsv" % "2.4",
-      "com.opencsv" % "opencsv" % "5.5.1"
+      "au.com.bytecode" % "opencsv" % "2.4"
     )
   )

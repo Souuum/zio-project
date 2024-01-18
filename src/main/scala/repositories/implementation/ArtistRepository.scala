@@ -6,15 +6,18 @@ import scala.collection.mutable.ListBuffer
 
 
 object ArtistRepository extends IBaseRepository[Artist]{
-  val artists = CsvReaderBatch.beginRead("artists.csv")
+  val artists = CsvReaderBatch.beginRead("Artists.csv")
   val artistsMutableList: ListBuffer[Artist] = ListBuffer()
   for (artist <- artists) {
-    for (index <- artist) {
-      val parts: List[String] = index.split(";").toList
+    val artistToAdd = artist match {
+      case List(id, name, genreList, popularity, url) =>
+        val genres = genreList.split(" ").map(_.trim).toList
+        Artist(id, name, genres, popularity, url)
 
-      val artist = Artist(parts(0), parts(1), parts(2).split(" ").toList, parts(3), parts(4))
-      artistsMutableList += artist
+      case _ =>
+        throw new IllegalArgumentException("Invalid list format")
     }
+    artistsMutableList += artistToAdd
   }
 
   override def getAll(): ListBuffer[Artist] = artistsMutableList

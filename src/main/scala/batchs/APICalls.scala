@@ -94,7 +94,6 @@ class APICalls {
       val id_artists: String = artistsArray.flatMap(_.hcursor.downField("id").as[String].toOption).mkString(" ")
 
       val entries: Array[String] = Array(id.getOrElse(""), name.getOrElse(""), popularity.map(_.toString).getOrElse(""), explicit.map(_.toString).getOrElse(""), external_urls.getOrElse(""), id_album.getOrElse(""), id_artists)
-
       TracksWriterCSV.writeInCSV(entries)
     }
 

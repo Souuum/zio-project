@@ -19,7 +19,7 @@ object CsvReaderBatch {
     val decodedPath = URLDecoder.decode(path, "UTF-8")
     val pathString = decodedPath.toString
     val grandparentDirectory = pathString.split("\\\\").dropRight(4).mkString("\\\\")
-    val ressourcesDirectory = grandparentDirectory + "\\\\src\\\\main\\\\ressources"
+    val ressourcesDirectory = grandparentDirectory + "\\\\src\\\\main\\\\resources"
     println(ressourcesDirectory)
     val data = readCSV(ressourcesDirectory + "\\\\" + filename)
     data

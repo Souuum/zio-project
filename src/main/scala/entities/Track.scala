@@ -6,6 +6,6 @@ case class Track(
                   popularity: String,
                   explicit : String,
                   external_urls : String,
-                  id_artists: List[String],
-                  id_tracks: List[String]
+                  id_album: String,
+                  id_artists: List[String]
                 )

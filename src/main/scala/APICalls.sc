@@ -1,11 +1,9 @@
-
 import batchs.APICalls
-
 val apiCalls : APICalls = new APICalls()
 
 apiCalls.extractToken()
 
-apiCalls.writeTracksInCSV();
+apiCalls.writeTracksInCSV()
 apiCalls.writeAlbumsInCSV()
 apiCalls.writeArtistsInCSV()
 
