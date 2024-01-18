@@ -1,5 +1,5 @@
 // Classe qui représente un morceau de musique
-
+package entities
 case class Track(
                   id : String,
                   name: String,

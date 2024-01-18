@@ -70,7 +70,7 @@ trait IBaseRepository[T] {
 }
 
 
-object AlbumsRepository extends IBaseRepository[Album] {
+object AlbumRepository extends IBaseRepository[Album] {
   val albums = CsvReaderExample.main("albums.csv")
   val albumsMutableList: ListBuffer[Album] = ListBuffer()
   for (album <- albums) {
@@ -91,7 +91,7 @@ object AlbumsRepository extends IBaseRepository[Album] {
   override def getAllAveragePopularityByGenre(): ListBuffer[Album] = ???
 }
 
-object TracksRepository extends IBaseRepository[Track]{
+object TrackRepository extends IBaseRepository[Track]{
   val tracks = CsvReaderExample.main("tracks.csv")
   val tracksMutableList: ListBuffer[Track] = ListBuffer()
   for (track <- tracks) {
@@ -137,11 +137,11 @@ object ArtistRepository extends IBaseRepository[Artist]{
   def getAllByGenreDescPopularity(genre: String): ListBuffer[Artist] = getAllByGenre(genre).sortWith(_.popularity > _.popularity)
 }
 
-AlbumsRepository.getAll().foreach(println)
+AlbumRepository.getAll().foreach(println)
 
-TracksRepository.getAll().foreach(println)
+TrackRepository.getAll().foreach(println)
 
-ArtistsRepository.getAll().foreach(println)
+ArtistRepository.getAll().foreach(println)
 
 
 
