@@ -1,5 +1,5 @@
 
-import com.opencsv.CSVWriter
+import com.opencsv.{CSVReader, CSVWriter}
 import io.circe.Decoder
 import sttp.client3.*
 import sttp.client3.asynchttpclient.future.AsyncHttpClientFutureBackend
@@ -12,9 +12,18 @@ import io.circe.parser.{decode, parse}
 import io.circe.generic.auto.*
 
 import java.io.FileWriter
+import java.net.URLDecoder
 
 case class Token(access_token: String, token_type: String, expires_in: Int)
-case class Tracks(tracks: String)
+
+//Making Directory
+val path = getClass.getResource("").getPath.replaceAll("/", "\\\\")
+val decodedPath = URLDecoder.decode(path, "UTF-8")
+val grandparentDirectory = decodedPath.split("\\\\").dropRight(3).mkString("\\\\")
+val resourcesDirectory = grandparentDirectory + "\\\\src\\\\main\\\\resources"
+println(resourcesDirectory)
+
+
 
 // FIX TOKEN FORMAT
 def extractToken(responseBody: String): String = {
@@ -28,7 +37,6 @@ def extractToken(responseBody: String): String = {
     "Unexpected response format"
   }
 }
-
 
 // FIX TRACKS FORMAT
 def extractContent(responseBody: String): String = {
@@ -68,14 +76,12 @@ response = Await.result(backend.send(request), 5.seconds)
 val jsonTracks = parse(extractContent(response.body.toString));
 
 //writing in the CSV
-val projectDir = System.getProperty("user.dir")
-//val outputPath = s"$projectDir/output.csv"
-val TRACKSPATH = s"D:/Tracks.csv"
-println(s"Current Working Directory: $TRACKSPATH")
+val tracksPath = s"$resourcesDirectory/Tracks.csv"
+println(s"Current Working Directory: $tracksPath")
 
-val TracksCSV = new CSVWriter(new FileWriter(TRACKSPATH))
+val TracksCSV = new CSVWriter(new FileWriter(tracksPath))
 
-val entries = Array("id", "name", "popularity", "explicit", "external_urls", "id_album", "id_artists")
+var entries = Array("id", "name", "popularity", "explicit", "external_urls", "id_album", "id_artists")
 TracksCSV.writeNext(entries)
 
 
@@ -93,22 +99,18 @@ trackArray.foreach { trackJson =>
   val artistsArray: Vector[Json] = trackJson.hcursor.downField("artists").as[Vector[Json]].getOrElse(Vector.empty)
   val id_artists: String = artistsArray.flatMap(_.hcursor.downField("id").as[String].toOption).mkString(",")
 
-
-  //val id_artist: Option[String] = trackJson.hcursor.downField("artists").downArray.downField("id").as[String].toOption
-
   val entries: Array[String] = Array(id.getOrElse(""), name.getOrElse(""), popularity.map(_.toString).getOrElse(""), explicit.map(_.toString).getOrElse(""), external_urls.getOrElse(""), id_album.getOrElse(""), id_artists)
 
   TracksCSV.writeNext(entries);
-  //println(entries.mkString("Array(", ", ", ")"));
 }
 
 TracksCSV.close()
 
 
-/*
+
 
 // GET ALL ARTISTS
-var request = basicRequest
+request = basicRequest
   .get(uri"https://api.spotify.com/v1/artists?ids=7lMgpN1tEBQKpRoUMKB8iw,04gDigrS5kc9YWfZHwBETP,137W8MRPWKqSmrBGDBFSop,67hb7towEyKvt5Z8Bx306c,55Aa2cqylxrFIXC767Z865,3TVXtAsR1Inumwj472S9r4,6M2wZ9GZgrQXHCFfjv46we,5YGY8feqx7naU7z4HrwZM6,6MF9fzBmfXghAz953czmBC,0jnsk9HBra6NMjO2oANoPY,5pKCCKE2ajJHZ9KAiaK11H,7CajNmpbOovFoOoasH2HaY,2wY79sveU1sp5g7SokKOiI,0X2BH1fck6amBIoJhDVmmJ,6MDME20pz9RveH9rEXvrOM,1Xylc3o4UrD53lo9CvFvVg,0FEJqmeLRzsXj8hgcZaAyB,4AK6F7OLvEQ5QYCBNiQWHq,0du5cEVh5yTK9QJze8zA0C,6jJ0s89eD6GaHleKKya26X,06HL4z0CvFAxyc27GXpf02,6vWDO969PvNqNYHIOW5v0m")
   .header("Authorization", "Bearer " + TOKEN)
 
@@ -119,14 +121,12 @@ response = Await.result(backend.send(request), 5.seconds)
 val jsonArtists = parse(extractContent(response.body.toString));
 
 //writing in the CSV
-val projectDir = System.getProperty("user.dir")
-//val outputPath = s"$projectDir/output.csv"
-val ARTISTSPATH = s"D:/Artists.csv"
-println(s"Current Working Directory: $ARTISTSPATH")
+val artistsPath = s"$resourcesDirectory/Artists.csv"
+println(s"Current Working Directory: $artistsPath")
 
-val ArtistsCSV = new CSVWriter(new FileWriter(ARTISTSPATH))
+val ArtistsCSV = new CSVWriter(new FileWriter(artistsPath))
 
-val entries = Array("id", "name", "genres", "popularity", "external_urls")
+entries = Array("id", "name", "genres", "popularity", "external_urls")
 ArtistsCSV.writeNext(entries)
 
 
@@ -143,41 +143,35 @@ artistsArray.foreach { trackJson =>
   val entries: Array[String] = Array(id.getOrElse(""), name.getOrElse(""), genres.getOrElse(""), popularity.map(_.toString).getOrElse(""), external_urls.getOrElse(""))
 
   ArtistsCSV.writeNext(entries);
-  //println(entries.mkString("Array(", ", ", ")"));
 }
 
 ArtistsCSV.close()
 
-*/
 
-/*
 // GET ALL ALBUMS
-var request = basicRequest
+request = basicRequest
   .get(uri"https://api.spotify.com/v1/albums?ids=704GHNtZhEe9TBgleCNNGv,01sfgrNbnnPUEyz6GZYlt9,5DvJgsMLbaR1HmAI6VhfcQ,0TjgUvNEDN2PegfZVkoggi,0ubDm7S0h9Yzt0CvwmOhGf,2vBLKFrI1rZqB7VtGxcsR5,6VN62DL9qSYG53VGXfohOn,0dNt3MfPrvj6mHmajSuahw,7lPoGKpCGgdKFAxpudhAH5,1SrvubPy1Dg2BWJyTMcmgr,00EjgohJGEYfe4vP35LVOv,1r7XjAgjwlakmXC2GbPXjH,4gCNyS7pidfK3rKWhB3JOY,2sWX3HYnZjPZ9MrH6MFsBt,4PgleR09JVnm3zY1fW3XBA,6J84szYCnMfzEcvIcfWMFL,3jB9yFDwRe3KhtGnHXJntk,6FJxoadUE4JNVwWHghBwnb,5MQBzs5YlZlE28mD9yUItn")
   .header("Authorization", "Bearer " + TOKEN)
 
 response = Await.result(backend.send(request), 5.seconds)
-println(response.body)
 
 //Transform into JSON
 val jsonAlbums = parse(extractContent(response.body.toString));
 
 //writing in the CSV
-val projectDir = System.getProperty("user.dir")
-//val outputPath = s"$projectDir/output.csv"
-val ALBUMSPATH = s"D:/Albums.csv"
-println(s"Current Working Directory: $ALBUMSPATH")
+val albumsPath = s"$resourcesDirectory/Albums.csv"
+println(s"Current Working Directory: $albumsPath")
 
-val AlbumsCSV = new CSVWriter(new FileWriter(ALBUMSPATH))
+val AlbumsCSV = new CSVWriter(new FileWriter(albumsPath))
 
-val entries = Array("id", "name", "album_type", "total_tracks", "release_date", "popularity", "external_urls", "id_artists")
+entries = Array("id", "name", "album_type", "total_tracks", "release_date", "popularity", "external_urls", "id_artists")
 AlbumsCSV.writeNext(entries)
 
 
 // Extract information for each track in the array
-val artistsArray: Vector[Json] = jsonAlbums.flatMap(_.hcursor.downField("albums").as[Vector[Json]]).getOrElse(Vector.empty)
+val albumsArray: Vector[Json] = jsonAlbums.flatMap(_.hcursor.downField("albums").as[Vector[Json]]).getOrElse(Vector.empty)
 
-artistsArray.foreach { trackJson =>
+albumsArray.foreach { trackJson =>
   val id: Option[String] = trackJson.hcursor.downField("id").as[String].toOption
   val name: Option[String] = trackJson.hcursor.downField("name").as[String].toOption
   val album_type: Option[String] = trackJson.hcursor.downField("album_type").as[String].toOption
@@ -193,10 +187,9 @@ artistsArray.foreach { trackJson =>
   val entries: Array[String] = Array(id.getOrElse(""), name.getOrElse(""), album_type.getOrElse(""), total_tracks.map(_.toString).getOrElse(""), release_date.getOrElse(""), popularity.map(_.toString).getOrElse(""), external_urls.getOrElse(""), id_artists)
 
   AlbumsCSV.writeNext(entries);
-  //println(entries.mkString("Array(", ", ", ")"));
 }
 
-AlbumsCSV.close()*/
+AlbumsCSV.close()
 
 backend.close()
 
