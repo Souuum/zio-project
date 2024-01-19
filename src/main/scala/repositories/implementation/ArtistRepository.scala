@@ -86,20 +86,32 @@ object ArtistRepository extends ZIOAppDefault {
     } yield i
   }
 
-  def testGenre = {
+  def testPopDESC = {
     for {
       _ <- printLine("Récupération des artistes")
       _ <- printLine("Veuillez patienter...")
       _ <- printLine("Récupération terminée !")
-      _ <- printLine("Trie des artistes par genre")
+      _ <- printLine("Trie des artistes par popularité descendante")
       _ <- printLine("Veuillez patienter...")
-      i <- getByGenre("rap").map(_.foreach(println))
+      i <- getArtistOrderedByPopularityDESC.map(_.foreach(println))
+      _ <- printLine("Trie terminé !")
+    } yield i
+  }
+
+  def testGenre(genre: String) = {
+    for {
+      _ <- printLine("Récupération des artistes")
+      _ <- printLine("Veuillez patienter...")
+      _ <- printLine("Récupération terminée !")
+      _ <- printLine("Récupération des artistes dans la catégorie " + genre)
+      _ <- printLine("Veuillez patienter...")
+      i <- getByGenre(genre).map(_.foreach(println))
       _ <- printLine("Trie terminé !")
     } yield i
   }
 
   override def run = {
-    testPopASC
+    testGenre("pop")
   }
 
 }
