@@ -51,6 +51,9 @@ The second one is ```beginRead``` → It is used to begin to have the path of th
 ## Repositories
 The repositories contain the main logic of the code.\
 There are repositories for Albums, Tracks and Artists.
+Inside the main menue, it is specified that you can only see 10 raws of data. That is due to us limiting the api call to 10 so that we don't exceed the limitation.
+Hence, we did not directly implement the number on functions `scala getPopASC `, `scala getPopDESC `... as we only have 10 raws anyway, but it would be quite easy to implement such things, by using the `scala ZSink.take(n: Int)` method, that allow us to select only the first n object of a Chunk.
+
 
 ### BaseRepository
 Each of the repositories have an object that extends to an interface IBaseRepository.\
