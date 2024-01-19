@@ -20,6 +20,7 @@ lazy val root = project
       "dev.zio" %% "zio-json" % zioJsonVersion,
       "dev.zio" %% "zio-schema" % zioSchemaVersion,
       "dev.zio" %% "zio-jdbc" % zioJdbcVersion,
+      "dev.zio" %% "zio-test" % zioVersion,
       "com.softwaremill.sttp.client3" %% "core" % "3.8.13",
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-future" % "3.8.13",
       "io.d11" %% "zhttp" % "2.0.0-RC10",
