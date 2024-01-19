@@ -6,7 +6,7 @@ import java.io.IOException
 import scala.collection.mutable.ListBuffer
 import repositories.implementation.TrackRepository
 
-object TrackeService {
+object TrackService {
 
   def callGetAllTracks(): ZIO[Track, IOException, ListBuffer[Track]] = {
     return TrackRepository.getAll()
@@ -15,7 +15,7 @@ object TrackeService {
   def callGetTrackById(id: String): Option[Track] = {
     return TrackRepository.getById(id)
   }
-//trie les albums par popularité
+//trie les tracks par popularité
   def callSortTracksPopularityASC()
       : ZIO[Track, IOException, ListBuffer[Track]] = {
     return TrackRepository.getAllByAscPopularity()

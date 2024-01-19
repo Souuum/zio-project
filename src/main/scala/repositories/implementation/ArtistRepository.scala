@@ -6,6 +6,8 @@ import zio._
 import zio.Console._
 import java.io.IOException
 import scala.collection.mutable.ListBuffer
+import batchs.CsvReaderBatch.readCSV
+import zio.stream.ZStream
 
 object ArtistRepository extends IBaseRepository[Artist] {
   val artists = CsvReaderBatch.beginRead("Artists.csv")
@@ -33,12 +35,20 @@ object ArtistRepository extends IBaseRepository[Artist] {
     artistsMutableList.find(_.id == id)
   override def getAllByAscPopularity()
       : ZIO[Artist, IOException, ListBuffer[Artist]] = {
+
     for {
+      i <- ZIO.succeed(artistsMutableList.sortWith(_.popularity < _.popularity))
+      stream <- ZStream.fromIterable(i).foreach(Console.printLine(_))
       _ <- printLine("Trie des artistes par popularité")
-      _ <- printLine("Veuillez patienter...")
-      _ <- printLine("Trie terminé !")
-    } yield artistsMutableList.sortWith(_.popularity < _.popularity)
+    } yield i
   }
+
+  def test(): Any = {
+    for {
+      i <- artistsMutableList.sortWith(_.popularity > _.popularity)
+    } yield i
+  }
+
   override def getAllByDescPopularity()
       : ZIO[Artist, IOException, ListBuffer[Artist]] = {
     for {

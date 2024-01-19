@@ -1,11 +1,12 @@
 import zio._
 import zio.http._
 
-object HttpServer extends ZIOAppDefault{
+object HttpServer extends ZIOAppDefault {
 
   val spotifyPath = "https://api.spotify.com/v1/artists"
   val id = "0TnOYISbd1XYRBk9myaseg"
-  val bearer = "BQA9ddKqyTx9t5xHp8iCVnsqpE0sQs3fDr3bY5aG0z5-1cJWpw81Ti5L-sI5JpJ8Tsp51u-80ppPzTz_wKh7IN7lGp7zuXsvxBKCY_Xtq06cyd0OiQ0"
+  val bearer =
+    "BQA9ddKqyTx9t5xHp8iCVnsqpE0sQs3fDr3bY5aG0z5-1cJWpw81Ti5L-sI5JpJ8Tsp51u-80ppPzTz_wKh7IN7lGp7zuXsvxBKCY_Xtq06cyd0OiQ0"
 
   private object CounterHttpApp:
     def apply(): Http[Ref[Int], Nothing, Request, Response] =

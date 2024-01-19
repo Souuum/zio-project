@@ -7,7 +7,7 @@ import java.io.IOException
 import scala.collection.mutable.ListBuffer
 import repositories.implementation.ArtistRepository
 
-object ArtisteService {
+object ArtistService {
 
   def callGetAllArtists(): ZIO[Artist, IOException, ListBuffer[Artist]] = {
     return ArtistRepository.getAll()
@@ -16,7 +16,7 @@ object ArtisteService {
   def callGetArtistById(id: String): Option[Artist] = {
     return ArtistRepository.getById(id)
   }
-//trie les albums par popularité
+//trie les artistes par popularité
   def callSortArtistsPopularityASC()
       : ZIO[Artist, IOException, ListBuffer[Artist]] = {
     return ArtistRepository.getAllByAscPopularity()
@@ -31,6 +31,10 @@ object ArtisteService {
       genre: String
   ): ZIO[Artist, IOException, ListBuffer[Artist]] = {
     return ArtistRepository.getByGenre(genre)
+  }
+
+  def test(): Any = {
+    return ArtistRepository.test()
   }
 
 }
