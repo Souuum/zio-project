@@ -8,15 +8,18 @@ import java.io.IOException
 import scala.collection.mutable.ListBuffer
 import batchs.CsvReaderBatch.readCSV
 import zio.stream.ZStream
+import zio.stream.ZSink
 
-object ArtistRepository extends IBaseRepository[Artist] {
-  val artists = CsvReaderBatch.beginRead("Artists.csv")
+object ArtistRepository extends ZIOAppDefault {
+
+  val artists = CsvReaderBatch.beginRead("Artists.csv").tail
   val artistsMutableList: ListBuffer[Artist] = ListBuffer()
   for (artist <- artists) {
     val artistToAdd = artist match {
       case List(id, name, genreList, popularity, url) =>
         val genres = genreList.split(" ").map(_.trim).toList
-        Artist(id, name, genres, popularity, url)
+        val popInt = popularity.toInt
+        Artist(id, name, genres, popInt, url)
 
       case _ =>
         throw new IllegalArgumentException("Invalid list format")
@@ -24,49 +27,79 @@ object ArtistRepository extends IBaseRepository[Artist] {
     artistsMutableList += artistToAdd
   }
 
-  override def getAll(): ZIO[Artist, IOException, ListBuffer[Artist]] = {
+  val aSuccess: ZIO[Any, IOException, ListBuffer[Artist]] =
+    ZIO.succeed(artistsMutableList)
+
+  val aStream: ZStream[Any, IOException, Artist] =
+    ZStream.fromIterable(artistsMutableList)
+
+  val getAll: ZSink[Any, Nothing, Artist, IOException, Chunk[Artist]] =
+    ZSink.collectAll[Artist]
+
+  val orderedByPopularityASC
+      : ZSink[Any, Nothing, Artist, IOException, Chunk[Artist]] =
+    getAll.map(_.sortWith(_.popularity < _.popularity))
+
+  val getArtistOrderedByPopularityASC
+      : ZIO[Any, IOException, Chunk[(String, Int)]] =
+    aStream
+      .run(orderedByPopularityASC)
+      .map(
+        _.sortWith(_.popularity < _.popularity).map(artist =>
+          (artist.name, artist.popularity)
+        )
+      )
+
+  val orderedByPopularityDESC
+      : ZSink[Any, Nothing, Artist, IOException, Chunk[Artist]] =
+    getAll.map(_.sortWith(_.popularity > _.popularity))
+
+  val getArtistOrderedByPopularityDESC
+      : ZIO[Any, IOException, Chunk[(String, Int)]] =
+    aStream
+      .run(orderedByPopularityDESC)
+      .map(
+        _.sortWith(_.popularity > _.popularity).map(artist =>
+          (artist.name, artist.popularity)
+        )
+      )
+
+  val getByGenre: String => ZIO[Any, IOException, Chunk[(String, Int)]] =
+    genre =>
+      aStream
+        .run(getAll)
+        .map(
+          _.filter(artist => artist.genres.contains(genre)).map(artist =>
+            (artist.name, artist.popularity)
+          )
+        )
+
+  def testPopASC = {
     for {
       _ <- printLine("Récupération des artistes")
       _ <- printLine("Veuillez patienter...")
       _ <- printLine("Récupération terminée !")
-    } yield artistsMutableList
-  }
-  override def getById(id: String): Option[Artist] =
-    artistsMutableList.find(_.id == id)
-  override def getAllByAscPopularity()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = {
-
-    for {
-      i <- ZIO.succeed(artistsMutableList.sortWith(_.popularity < _.popularity))
-      stream <- ZStream.fromIterable(i).foreach(Console.printLine(_))
-      _ <- printLine("Trie des artistes par popularité")
-    } yield i
-  }
-
-  def test(): Any = {
-    for {
-      i <- artistsMutableList.sortWith(_.popularity > _.popularity)
-    } yield i
-  }
-
-  override def getAllByDescPopularity()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = {
-    for {
-      _ <- printLine("Trie des artistes par popularité")
+      _ <- printLine("Trie des artistes par popularité ascendante")
       _ <- printLine("Veuillez patienter...")
+      i <- getArtistOrderedByPopularityASC.map(_.foreach(println))
       _ <- printLine("Trie terminé !")
-    } yield artistsMutableList.sortWith(_.popularity > _.popularity)
+    } yield i
   }
 
-  override def getAllAveragePopularityByGenre()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = ???
-
-  def getByGenre(
-      genre: String
-  ): ZIO[Artist, IOException, ListBuffer[Artist]] =
+  def testGenre = {
     for {
-      _ <- printLine("Récupération des aritstes")
+      _ <- printLine("Récupération des artistes")
       _ <- printLine("Veuillez patienter...")
       _ <- printLine("Récupération terminée !")
-    } yield artistsMutableList.filter(_.genres.contains(genre))
+      _ <- printLine("Trie des artistes par genre")
+      _ <- printLine("Veuillez patienter...")
+      i <- getByGenre("rap").map(_.foreach(println))
+      _ <- printLine("Trie terminé !")
+    } yield i
+  }
+
+  override def run = {
+    testPopASC
+  }
+
 }

@@ -1,15 +1,12 @@
 import batchs.APICalls
 
-
-val apiCalls : APICalls = new APICalls()
+val apiCalls: APICalls = new APICalls()
 
 apiCalls.extractToken()
 
 apiCalls.writeTracksInCSV()
 apiCalls.writeAlbumsInCSV()
 apiCalls.writeArtistsInCSV()
-
-
 
 /*
 Track:

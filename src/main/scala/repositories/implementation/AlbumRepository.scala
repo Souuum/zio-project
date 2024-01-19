@@ -40,7 +40,6 @@ object AlbumRepository extends IBaseRepository[Album] {
     albumsMutableList += albumAlbumoAdd
   }
 
-
   override def getAll(): ZIO[Album, IOException, ListBuffer[Album]] = {
     for {
       _ <- printLine("Récupération des albums")

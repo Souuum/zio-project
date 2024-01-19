@@ -9,32 +9,28 @@ import repositories.implementation.ArtistRepository
 
 object ArtistService {
 
-  def callGetAllArtists(): ZIO[Artist, IOException, ListBuffer[Artist]] = {
-    return ArtistRepository.getAll()
-  }
+// def callGetAllArtists(): ZIO[Artist, IOException, ListBuffer[Artist]] = {
+//     return ArtistRepository.getAll()
+//   }
 
-  def callGetArtistById(id: String): Option[Artist] = {
-    return ArtistRepository.getById(id)
-  }
-//trie les artistes par popularité
-  def callSortArtistsPopularityASC()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = {
-    return ArtistRepository.getAllByAscPopularity()
-  }
+//   def callGetArtistById(id: String): Option[Artist] = {
+//     return ArtistRepository.getById(id)
+//   }
+// //trie les artistes par popularité
+//   def callSortArtistsPopularityASC()
+//       : ZIO[Artist, IOException, ListBuffer[Artist]] = {
+//     return ArtistRepository.getAllByAscPopularity()
+//   }
 
-  def callSortArtistsPopularityDESC()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = {
-    return ArtistRepository.getAllByDescPopularity()
-  }
+//   def callSortArtistsPopularityDESC()
+//       : ZIO[Artist, IOException, ListBuffer[Artist]] = {
+//     return ArtistRepository.getAllByDescPopularity()
+//   }
 
-  def callSortByGenre(
-      genre: String
-  ): ZIO[Artist, IOException, ListBuffer[Artist]] = {
-    return ArtistRepository.getByGenre(genre)
-  }
-
-  def test(): Any = {
-    return ArtistRepository.test()
-  }
+//   def callSortByGenre(
+//       genre: String
+//   ): ZIO[Artist, IOException, ListBuffer[Artist]] = {
+//     return ArtistRepository.getByGenre(genre)
+//   }
 
 }
