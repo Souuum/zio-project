@@ -8,10 +8,10 @@ import java.net.URLDecoder
 class WriterCSV {
 
     // Making Directory
-    private val path: String = getClass.getResource("").getPath.replaceAll("/", "\\\\")
+    private val path: String = getClass.getResource("").getPath.replaceAll("/", "/")
     private val decodedPath: String = URLDecoder.decode(path, "UTF-8")
-    private val grandparentDirectory: String = decodedPath.split("\\\\").dropRight(4).mkString("\\\\")
-    private val resourcesDirectory: String = grandparentDirectory + "\\\\src\\\\main\\\\resources"
+    private val grandparentDirectory: String = decodedPath.split("/").dropRight(4).mkString("/")
+    private val resourcesDirectory: String = grandparentDirectory + "/src/main/resources"
 
     private var tracksPath : String = _
     private var CSVFile : CSVWriter = _
