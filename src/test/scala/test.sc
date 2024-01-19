@@ -1,7 +1,6 @@
-import entities.Album
 import scala.collection.mutable.ListBuffer
-import repositories.implementation
-import repositories.implementation.AlbumRepository
+
+
 
 // val album: List[Album] = albumRepo.getAll()
 
