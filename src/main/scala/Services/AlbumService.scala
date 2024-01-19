@@ -9,6 +9,14 @@ import repositories.implementation.AlbumRepository
 //TODO
 object AlbumService {
 
+  def callGetAllAlbums(): ZIO[Album, IOException, ListBuffer[Album]] = {
+    return AlbumRepository.getAll()
+  }
+
+  def callGetAlbumById(id: String): Option[Album] = {
+    return AlbumRepository.getById(id)
+  }
+
 //trie les albums par popularité
   def callSortAlbumsPopularityASC()
       : ZIO[Album, IOException, ListBuffer[Album]] = {

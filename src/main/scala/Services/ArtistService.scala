@@ -9,6 +9,13 @@ import repositories.implementation.ArtistRepository
 
 object ArtisteService {
 
+  def callGetAllArtists(): ZIO[Artist, IOException, ListBuffer[Artist]] = {
+    return ArtistRepository.getAll()
+  }
+
+  def callGetArtistById(id: String): Option[Artist] = {
+    return ArtistRepository.getById(id)
+  }
 //trie les albums par popularité
   def callSortArtistsPopularityASC()
       : ZIO[Artist, IOException, ListBuffer[Artist]] = {
