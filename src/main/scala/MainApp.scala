@@ -52,6 +52,12 @@ object MyApp extends ZIOAppDefault {
   //MODIFY FROM HERE
   def tracksInput(): Unit = {
     println()
+
+    println("1. ...")
+    println("2. ...")
+    println("3. ...")
+    println("0. Exit")
+
     while (true) {
       println("Choose the right number")
       val input: String = scala.io.StdIn.readLine()
@@ -81,6 +87,12 @@ object MyApp extends ZIOAppDefault {
 
   def albumsInput(): Unit = {
     println()
+
+    println("1. ...")
+    println("2. ...")
+    println("3. ...")
+    println("0. Exit")
+
     while (true) {
       println("Choose the right number")
       val input: String = scala.io.StdIn.readLine()
@@ -110,6 +122,12 @@ object MyApp extends ZIOAppDefault {
 
   def artistsInput(): Unit = {
     println()
+
+    println("1. ...")
+    println("2. ...")
+    println("3. ...")
+    println("0. Exit")
+
     while (true) {
       println("Choose the right number")
       val input: String = scala.io.StdIn.readLine()
