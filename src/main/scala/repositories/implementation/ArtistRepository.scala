@@ -24,7 +24,7 @@ object ArtistRepository extends IBaseRepository[Artist] {
     artistsMutableList += artistToAdd
   }
 
-  override def getAll(): ZIO[Artist, IOException, ListBuffer[Artist]] = {
+  override def getAll(): ZIO[Any, IOException, ListBuffer[Artist]] = {
     for {
       _ <- printLine("Récupération des artistes")
       _ <- printLine("Veuillez patienter...")
@@ -34,7 +34,7 @@ object ArtistRepository extends IBaseRepository[Artist] {
   override def getById(id: String): Option[Artist] =
     artistsMutableList.find(_.id == id)
   override def getAllByAscPopularity()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = {
+      : ZIO[Any, IOException, ListBuffer[Artist]] = {
 
     for {
       i <- ZIO.succeed(artistsMutableList.sortWith(_.popularity < _.popularity))
@@ -50,7 +50,7 @@ object ArtistRepository extends IBaseRepository[Artist] {
   }
 
   override def getAllByDescPopularity()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = {
+      : ZIO[Any, IOException, ListBuffer[Artist]] = {
     for {
       _ <- printLine("Trie des artistes par popularité")
       _ <- printLine("Veuillez patienter...")
@@ -59,11 +59,11 @@ object ArtistRepository extends IBaseRepository[Artist] {
   }
 
   override def getAllAveragePopularityByGenre()
-      : ZIO[Artist, IOException, ListBuffer[Artist]] = ???
+      : ZIO[Any, IOException, ListBuffer[Artist]] = ???
 
   def getByGenre(
       genre: String
-  ): ZIO[Artist, IOException, ListBuffer[Artist]] =
+  ): ZIO[Any, IOException, ListBuffer[Artist]] =
     for {
       _ <- printLine("Récupération des aritstes")
       _ <- printLine("Veuillez patienter...")

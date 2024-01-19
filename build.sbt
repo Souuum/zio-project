@@ -1,3 +1,5 @@
+import sbt.Keys.testFrameworks
+
 val scala3Version: String = "3.3.1"
 val zioVersion: String = "2.0.20"
 val zioHttpVersion: String = "3.0.0-RC2"
@@ -20,7 +22,9 @@ lazy val root = project
       "dev.zio" %% "zio-json" % zioJsonVersion,
       "dev.zio" %% "zio-schema" % zioSchemaVersion,
       "dev.zio" %% "zio-jdbc" % zioJdbcVersion,
-      "dev.zio" %% "zio-test" % zioVersion,
+      "dev.zio" %% "zio-test" % "2.0.15" % Test,
+      "dev.zio" %% "zio-test-sbt"      % "2.1-RC1" % Test,
+      "dev.zio" %% "zio-test-magnolia" % "2.1-RC1" % Test,
       "com.softwaremill.sttp.client3" %% "core" % "3.8.13",
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-future" % "3.8.13",
       "io.d11" %% "zhttp" % "2.0.0-RC10",
@@ -29,4 +33,4 @@ lazy val root = project
       "com.opencsv" % "opencsv" % "5.7.1",
       "au.com.bytecode" % "opencsv" % "2.4"
     )
-  )
+)

@@ -41,7 +41,7 @@ object AlbumRepository extends IBaseRepository[Album] {
   }
 
 
-  override def getAll(): ZIO[Album, IOException, ListBuffer[Album]] = {
+  override def getAll(): ZIO[Any, IOException, ListBuffer[Album]] = {
     for {
       _ <- printLine("Récupération des albums")
       _ <- printLine("Veuillez patienter...")
@@ -52,7 +52,7 @@ object AlbumRepository extends IBaseRepository[Album] {
     albumsMutableList.find(_.id == id)
 
   override def getAllByAscPopularity()
-      : ZIO[Album, IOException, ListBuffer[Album]] = {
+      : ZIO[Any, IOException, ListBuffer[Album]] = {
     for {
       _ <- printLine("Trie des albums par popularité")
       _ <- printLine("Veuillez patienter...")
@@ -60,7 +60,7 @@ object AlbumRepository extends IBaseRepository[Album] {
     } yield albumsMutableList.sortWith(_.popularity < _.popularity)
   }
   override def getAllByDescPopularity()
-      : ZIO[Album, IOException, ListBuffer[Album]] = {
+      : ZIO[Any, IOException, ListBuffer[Album]] = {
     for {
       _ <- printLine("Trie des albums par popularité")
       _ <- printLine("Veuillez patienter...")
@@ -69,5 +69,6 @@ object AlbumRepository extends IBaseRepository[Album] {
   }
 
   override def getAllAveragePopularityByGenre()
-      : ZIO[Album, IOException, ListBuffer[Album]] = ???
+      : ZIO[Any, IOException, ListBuffer[Album]] = ???
 }
+

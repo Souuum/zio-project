@@ -4,7 +4,7 @@ import zio.test.*
 import zio.test.Assertion.*
 import repositories.implementation.AlbumRepository
 import repositories.implementation.TrackRepository
-import repositories.implementation.ArtistRepository
+import repositories.implementation.ArtistRepository._
 import entities.Artist
 import scala.collection.mutable.ListBuffer
 
@@ -19,6 +19,12 @@ object RepositorySpec extends ZIOSpecDefault{
       },
       test("getTrackById, 2JzZzZUQj3Qff7wapcbKjc")(
         assert(TrackRepository.getById("2JzZzZUQj3Qff7wapcbKjc"))(isSome)
-      )
+      ),
+      test("getAllArtistsByPopularity") {
+        for{
+          artists <- AlbumRepository.getAllByAscPopularity()
+          sortedArtists = artists.sortBy(_.popularity)
+        }yield assert(sortedArtists)(equalTo(artists))
+      }
   )
 }

@@ -30,7 +30,7 @@ object TrackRepository extends IBaseRepository[Track] {
 
   }
 
-  override def getAll(): ZIO[Track, IOException, ListBuffer[Track]] = {
+  override def getAll(): ZIO[Any, IOException, ListBuffer[Track]] = {
     for {
       _ <- printLine("Récupération des tracks")
       _ <- printLine("Veuillez patienter...")
@@ -40,7 +40,7 @@ object TrackRepository extends IBaseRepository[Track] {
   override def getById(id: String): Option[Track] =
     tracksMutableList.find(_.id == id)
   override def getAllByAscPopularity()
-      : ZIO[Track, IOException, ListBuffer[Track]] = {
+      : ZIO[Any, IOException, ListBuffer[Track]] = {
     for {
       _ <- printLine("Trie des tracks par popularité")
       _ <- printLine("Veuillez patienter...")
@@ -48,7 +48,7 @@ object TrackRepository extends IBaseRepository[Track] {
     } yield tracksMutableList.sortWith(_.popularity < _.popularity)
   }
   override def getAllByDescPopularity()
-      : ZIO[Track, IOException, ListBuffer[Track]] = {
+      : ZIO[Any, IOException, ListBuffer[Track]] = {
     for {
       _ <- printLine("Trie des tracks par popularité")
       _ <- printLine("Veuillez patienter...")
@@ -57,5 +57,5 @@ object TrackRepository extends IBaseRepository[Track] {
   }
 
   override def getAllAveragePopularityByGenre()
-      : ZIO[Track, IOException, ListBuffer[Track]] = ???
+      : ZIO[Any, IOException, ListBuffer[Track]] = ???
 }
