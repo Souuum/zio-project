@@ -6,9 +6,12 @@ import zio.ZIO
 import zio.Console._
 import java.io.IOException
 import scala.collection.mutable.ListBuffer
+import zio.stream.ZSink
+import zio.Chunk
+import zio.stream.ZStream
 
-object TrackRepository extends IBaseRepository[Track] {
-  val tracks = CsvReaderBatch.beginRead("Tracks.csv")
+object TrackRepository {
+  val tracks = CsvReaderBatch.beginRead("Tracks.csv").tail
   val tracksMutableList: ListBuffer[Track] = ListBuffer()
   for (track <- tracks) {
     val trackToAdd = track match {
@@ -18,44 +21,77 @@ object TrackRepository extends IBaseRepository[Track] {
             popularity,
             explicit,
             url,
-            id_album,
+            id_track,
             id_tracksList
           ) =>
         val id_tracks = id_tracksList.split(" ").map(_.trim).toList
-        Track(id, name, popularity, explicit, url, id_album, id_tracks)
+        val popInt = popularity.toInt
+        Track(id, name, popInt, explicit, url, id_track, id_tracks)
       case _ =>
         throw new IllegalArgumentException("Invalid list format")
     }
     tracksMutableList += trackToAdd
 
   }
+  val aSuccess: ZIO[Any, IOException, ListBuffer[Track]] =
+    ZIO.succeed(tracksMutableList)
 
-  override def getAll(): ZIO[Any, IOException, ListBuffer[Track]] = {
+  val aStream: ZStream[Any, IOException, Track] =
+    ZStream.fromIterable(tracksMutableList)
+
+  val getAll: ZSink[Any, Nothing, Track, IOException, Chunk[Track]] =
+    ZSink.collectAll[Track]
+
+  val orderedByPopularityASC
+      : ZSink[Any, Nothing, Track, IOException, Chunk[Track]] =
+    getAll.map(_.sortWith(_.popularity < _.popularity))
+
+  val getTrackOrderedByPopularityASC
+      : ZIO[Any, IOException, Chunk[(String, Int)]] =
+    aStream
+      .run(orderedByPopularityASC)
+      .map(
+        _.sortWith(_.popularity < _.popularity).map(track =>
+          (track.name, track.popularity)
+        )
+      )
+
+  val orderedByPopularityDESC
+      : ZSink[Any, Nothing, Track, IOException, Chunk[Track]] =
+    getAll.map(_.sortWith(_.popularity > _.popularity))
+
+  val getTrackOrderedByPopularityDESC
+      : ZIO[Any, IOException, Chunk[(String, Int)]] =
+    aStream
+      .run(orderedByPopularityDESC)
+      .map(
+        _.sortWith(_.popularity > _.popularity).map(track =>
+          (track.name, track.popularity)
+        )
+      )
+
+  def getPopASC = {
     for {
       _ <- printLine("Récupération des tracks")
       _ <- printLine("Veuillez patienter...")
       _ <- printLine("Récupération terminée !")
-    } yield tracksMutableList
-  }
-  override def getById(id: String): Option[Track] =
-    tracksMutableList.find(_.id == id)
-  override def getAllByAscPopularity()
-      : ZIO[Any, IOException, ListBuffer[Track]] = {
-    for {
-      _ <- printLine("Trie des tracks par popularité")
+      _ <- printLine("Trie des tracks par popularité ascendante")
       _ <- printLine("Veuillez patienter...")
+      i <- getTrackOrderedByPopularityASC.map(_.foreach(println))
       _ <- printLine("Trie terminé !")
-    } yield tracksMutableList.sortWith(_.popularity < _.popularity)
-  }
-  override def getAllByDescPopularity()
-      : ZIO[Any, IOException, ListBuffer[Track]] = {
-    for {
-      _ <- printLine("Trie des tracks par popularité")
-      _ <- printLine("Veuillez patienter...")
-      _ <- printLine("Trie terminé !")
-    } yield tracksMutableList.sortWith(_.popularity > _.popularity)
+    } yield i
   }
 
-  override def getAllAveragePopularityByGenre()
-      : ZIO[Any, IOException, ListBuffer[Track]] = ???
+  def getPopDESC = {
+    for {
+      _ <- printLine("Récupération des tracks")
+      _ <- printLine("Veuillez patienter...")
+      _ <- printLine("Récupération terminée !")
+      _ <- printLine("Trie des tracks par popularité descendante")
+      _ <- printLine("Veuillez patienter...")
+      i <- getTrackOrderedByPopularityDESC.map(_.foreach(println))
+      _ <- printLine("Trie terminé !")
+    } yield i
+  }
+
 }

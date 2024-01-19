@@ -7,7 +7,7 @@ case class Album(
     album_type: String,
     total_tracks: String,
     release_date: String,
-    popularity: String,
+    popularity: Int,
     external_urls: String,
     id_artists: List[String],
     id_tracks: List[String]
