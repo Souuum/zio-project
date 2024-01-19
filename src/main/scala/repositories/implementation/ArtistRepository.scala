@@ -10,7 +10,7 @@ import batchs.CsvReaderBatch.readCSV
 import zio.stream.ZStream
 import zio.stream.ZSink
 
-object ArtistRepository extends ZIOAppDefault {
+object ArtistRepository {
 
   val artists = CsvReaderBatch.beginRead("Artists.csv").tail
   val artistsMutableList: ListBuffer[Artist] = ListBuffer()
@@ -64,7 +64,7 @@ object ArtistRepository extends ZIOAppDefault {
         )
       )
 
-  val getByGenre: String => ZIO[Any, IOException, Chunk[(String, Int)]] =
+  val selectByGenre: String => ZIO[Any, IOException, Chunk[(String, Int)]] =
     genre =>
       aStream
         .run(getAll)
@@ -74,7 +74,7 @@ object ArtistRepository extends ZIOAppDefault {
           )
         )
 
-  def testPopASC = {
+  def getPopASC = {
     for {
       _ <- printLine("Récupération des artistes")
       _ <- printLine("Veuillez patienter...")
@@ -86,20 +86,28 @@ object ArtistRepository extends ZIOAppDefault {
     } yield i
   }
 
-  def testGenre = {
+  def getPopDESC = {
     for {
       _ <- printLine("Récupération des artistes")
       _ <- printLine("Veuillez patienter...")
       _ <- printLine("Récupération terminée !")
-      _ <- printLine("Trie des artistes par genre")
+      _ <- printLine("Trie des artistes par popularité descendante")
       _ <- printLine("Veuillez patienter...")
-      i <- getByGenre("rap").map(_.foreach(println))
+      i <- getArtistOrderedByPopularityDESC.map(_.foreach(println))
       _ <- printLine("Trie terminé !")
     } yield i
   }
 
-  override def run = {
-    testPopASC
+  def getByGenre(genre: String) = {
+    for {
+      _ <- printLine("Récupération des artistes")
+      _ <- printLine("Veuillez patienter...")
+      _ <- printLine("Récupération terminée !")
+      _ <- printLine("Récupération des artistes dans la catégorie " + genre)
+      _ <- printLine("Veuillez patienter...")
+      i <- selectByGenre(genre).map(_.foreach(println))
+      _ <- printLine("Trie terminé !")
+    } yield i
   }
 
 }
