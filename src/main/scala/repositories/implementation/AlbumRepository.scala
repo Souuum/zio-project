@@ -11,7 +11,6 @@ object AlbumRepository extends IBaseRepository[Album] {
   val albums = CsvReaderBatch.beginRead("Albums.csv")
   val albumsMutableList: ListBuffer[Album] = ListBuffer()
   for (album <- albums) {
-    println(album)
     val albumAlbumoAdd = album match {
       case List(
             id,
