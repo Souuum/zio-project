@@ -45,3 +45,16 @@ In this object, we have to read the CSV file created with the Spotify API.
 ### We created two methods: 
 The first one is ```readCSV``` → It is used to read the CSV file.\
 The second one is ```beginRead``` → It is used to begin to have the path of the file.
+
+# The main logic
+
+## Repositories
+The repositories contain the main logic of the code.\
+There are repositories for Albums, Tracks and Artists.
+
+### BaseRepository
+Each of the repositories have an object that extends to an interface IBaseRepository.\
+This interface contain: `getAll`, `getById`, `getAllByAscPopularity`, `getAllByDescPopularity`, `getAllAveragePopularityByGenre`
+
+### Overrides
+We use overrides to call the GETs in the interface
