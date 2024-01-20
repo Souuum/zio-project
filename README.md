@@ -52,8 +52,20 @@ The second one is ```beginRead``` → It is used to begin to have the path of th
 The repositories contain the main logic of the code.\
 There are repositories for Albums, Tracks and Artists.
 Inside the main menue, it is specified that you can only see 10 raws of data. That is due to us limiting the api call to 10 so that we don't exceed the limitation.
-Hence, we did not directly implement the number on functions `scala getPopASC `, `scala getPopDESC `... as we only have 10 raws anyway, but it would be quite easy to implement such things, by using the `scala ZSink.take(n: Int)` method, that allow us to select only the first n object of a Chunk.
-
+Hence, we did not directly implement the number on functions `getPopASC `, `getPopDESC `... as we only have 10 raws anyway, but it would be quite easy to implement such things, by using the `ZSink.take(n: Int)` method, that allow us to select only the first n object of a Chunk.
+It would look like : 
+```scala
+  //get all data
+  val getAll: ZSink[Any, Nothing, T, IOException, Chunk[T]] =
+    ZSink.collectAll[T]
+  //sorts as we want
+  val filterExample
+      : ZSink[Any, Nothing, T, IOException, Chunk[T]] =
+    getAll.map(_.sortWith(_._ < _._))
+  //select n numbers
+  val takeN(n: Int) : ZSink[Any Nothing, T, IOException, Chunk[T]] =
+    ZSink.take(n)
+  ```
 
 ### BaseRepository
 Each of the repositories have an object that extends to an interface IBaseRepository.\
