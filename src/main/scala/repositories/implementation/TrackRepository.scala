@@ -42,6 +42,9 @@ object TrackRepository {
   val getAll: ZSink[Any, Nothing, Track, IOException, Chunk[Track]] =
     ZSink.collectAll[Track]
 
+  val getById: String => ZSink[Any, Nothing, Track, IOException, Option[Track]] =
+    id => getAll.map(_.find(_.id == id))
+
   val orderedByPopularityASC
       : ZSink[Any, Nothing, Track, IOException, Chunk[Track]] =
     getAll.map(_.sortWith(_.popularity < _.popularity))

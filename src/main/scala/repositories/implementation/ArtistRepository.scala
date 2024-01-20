@@ -36,6 +36,9 @@ object ArtistRepository {
   val getAll: ZSink[Any, Nothing, Artist, IOException, Chunk[Artist]] =
     ZSink.collectAll[Artist]
 
+  val getById: String => ZSink[Any, Nothing, Artist, IOException, Option[Artist]] =
+    id => getAll.map(_.find(_.id == id))
+
   val orderedByPopularityASC
       : ZSink[Any, Nothing, Artist, IOException, Chunk[Artist]] =
     getAll.map(_.sortWith(_.popularity < _.popularity))
