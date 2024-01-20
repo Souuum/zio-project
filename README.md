@@ -9,10 +9,8 @@ For more information on the sbt-dotty plugin, see the
 
 # The Menu
 Run the MainApp.scala and all the API calls and CSV files will be initiated automatically along with the main menu.\
-To use the main menu, you will need to enter a valid number in the menu provided or 0 to Exit.\
-Once you can see the main menu, it will ask you to navigate between (1) Tracks, (2) Albums or (3) Artists.\
-Once you enter a valid number, you will go through another menu that asks another number (or 0 to go back to the previous menu).\
-Based upon the second number entered, you will have a list of Tracks or Artists or Albums sorted based on the option that you chose.
+To use the main menu, you will need to enter a valid number in the menu provided or 10 to Exit.\
+Once you enter a valid number, you will have a list of Tracks or Artists or Albums sorted based on the option that you chose.
 
 # Reading from the Spotify API & Creating the CSV Files
 
