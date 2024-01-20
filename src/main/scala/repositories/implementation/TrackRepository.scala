@@ -1,6 +1,5 @@
 package repositories.implementation
 import batchs.CsvReaderBatch
-import repositories.interface.IBaseRepository
 import entities.Track
 import zio.ZIO
 import zio.Console._

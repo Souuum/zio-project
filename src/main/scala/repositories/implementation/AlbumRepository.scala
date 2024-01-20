@@ -2,7 +2,6 @@ package repositories.implementation
 
 import batchs.CsvReaderBatch
 import scala.collection.mutable.ListBuffer
-import repositories.interface.IBaseRepository
 import entities.Album
 import zio.ZIO
 import zio.Console._
